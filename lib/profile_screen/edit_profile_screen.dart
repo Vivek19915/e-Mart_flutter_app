@@ -14,13 +14,14 @@ class EditProfileScreen extends StatelessWidget {
 
   final dynamic data;
 
+  //constructor--->
   const EditProfileScreen({super.key, this.data});
 
   @override
   Widget build(BuildContext context) {
 
     //controller --- profile conroller
-    var controller = Get.find<ProfileController>();
+    var controller = Get.find<ProfileController>();        //-->using previous profile controller so values fill pass on this screen also
 
     return bgWidget(
       child: Scaffold(
@@ -58,10 +59,17 @@ class EditProfileScreen extends StatelessWidget {
                 ),
                 10.heightBox,
                 customTextFiled(
+                    title: "Old Password" ,
+                    hint: "*********" ,
+                    b: true,
+                    controller: controller.oldpassController
+                ),
+                10.heightBox,
+                customTextFiled(
                     title: "New Password" ,
                     hint: "*********" ,
-                    b: false ,
-                  controller: controller.passController
+                    b: true ,
+                    controller: controller.newpassController
                 ),
                 20.heightBox,
 
@@ -69,9 +77,37 @@ class EditProfileScreen extends StatelessWidget {
                 if(controller.isloading.value == true) CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(redColor),)
                 else ourButton(buttoncolor: redColor,onpress: () async{
                   controller.isloading(true);
-                  await controller.uploadProfileImage();
-                  await controller.updateProfile(imgUrl: controller.profileImageLink ,name: controller.nameController.text ,password: controller.passController.text );
-                  VxToast.show(context, msg: "Updated");
+
+                  if(controller.profilrIMgPath.value.isNotEmpty){
+                    //means user change the profile image
+                    await controller.uploadProfileImage();
+                  }
+                  else {
+                    //if user dont change the profile image --- then give it previosu fprofile image
+                    controller.profileImageLink = data['imageUrl'];
+                  }
+
+                  //if old password matches then update the new password
+                  if(controller.oldpassController.text == data['password']){
+                    await controller.changeAuthPassword(
+                        email: data['email'],
+                        oldpass: controller.oldpassController.text,
+                        newpass: controller.newpassController.text
+                    );
+
+                    await controller.updateProfile(
+                        imgUrl: controller.profileImageLink ,
+                        name: controller.nameController.text ,
+                        password: controller.newpassController.text
+                    );
+                    VxToast.show(context, msg: "Updated");
+                  }
+
+                  else if(controller.oldpassController.text != data['password']){
+                    VxToast.show(context, msg: "Enter correct old password");
+                    controller.isloading(false);
+                  }
+
                 },textcolor: whiteColor , title: "Save Changes").box.width(context.screenWidth/1).make(),
 
               ],

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_mart/consts/consts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,8 @@ class ProfileController extends GetxController{
 
   //textfields
   var nameController = TextEditingController();
-  var passController = TextEditingController();
+  var newpassController = TextEditingController();
+  var oldpassController = TextEditingController();
 
   // so that we can use it as global for this class
   var profileImageLink = '';
@@ -52,6 +54,16 @@ class ProfileController extends GetxController{
       'imageUrl' : imgUrl,
     },SetOptions(merge: true));
      isloading(false);
+  }
+
+
+  //to change old suthentication password to new pasword
+  changeAuthPassword({email,oldpass,newpass})async{
+    final cred = EmailAuthProvider.credential(email: email, password: oldpass);
+    await currentUser!.reauthenticateWithCredential(cred)         //phirse user ko login karke pass change kar dega
+    .then((value){
+      currentUser!.updatePassword(newpass);
+    }).catchError((error){debugPrint(error.toString());});       //catch error if some error occur then print it
   }
 
 

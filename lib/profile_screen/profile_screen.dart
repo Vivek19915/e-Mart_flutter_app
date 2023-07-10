@@ -22,6 +22,7 @@ class ProfileScreen extends StatelessWidget {
 
     return bgWidget(
       child: Scaffold(
+        //Streambuilder to collect all info about user form firestore
         body:StreamBuilder(
           stream: FirestoreServices.getUser(currentUser!.uid),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -72,7 +73,6 @@ class ProfileScreen extends StatelessWidget {
                           10.widthBox,
                           Align(alignment:Alignment.centerRight, child: Icon(Icons.edit,color: Colors.white,)).onTap(() {
                             controller.nameController.text = data_user['name'];
-                            controller.passController.text = data_user['password'];
                             Get.to(()=>EditProfileScreen(data: data_user));
                             print("edit profile");
                           }),
