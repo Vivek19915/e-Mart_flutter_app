@@ -14,7 +14,7 @@ var featuredProducttitles = ["Laptop" , "Cosmetics" ,"Macbook" ,"Womens Footwear
 var featuredProductPrice = ["₹100,000" , "₹120,000" ,"₹200,000" ,"₹10,000" ,"₹131,000" ,"₹100" ,"₹980,000"];
 
 var categoriesList  =  [womenClothing,menClothingFashion,compAcess,automobile,kidToys,sport,jewelery,cellPhone,furniture];
-var categoriesImages = [imgFc1, imgFc2, imgFc3, imgFc4, imgFc5, imgFc6, imgFc7, imgFc8, imgFc9,];
+var categoriesImages = [imgS1, imgFc1, imgFc2, imgFc3, imgFc4, imgFc5, imgS10, imgFc6, imgFc9,];
 
 
 //and similarly we make selection section for all categories

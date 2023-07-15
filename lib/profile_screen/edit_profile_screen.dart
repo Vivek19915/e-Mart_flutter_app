@@ -37,12 +37,12 @@ class EditProfileScreen extends StatelessWidget {
 
                 //if data image url and controller path is empty
                 data['imageUrl']=='' && controller.profilrIMgPath.isEmpty
-                ? Image.asset(imgProfile2,width: 100,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).make()
+                ? Image.asset(imgProfile2,width: 80,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).width(80).make()
                   //if data image url is not empty and controller path is empty
                   : data['imageUrl']!='' && controller.profilrIMgPath.isEmpty
-                    ? Image.network(data['imageUrl'],width: 100,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).make()
+                    ? Image.network(data['imageUrl'],width: 80,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).width(80).make()
                       //both are not empty
-                      : Image.file(File(controller.profilrIMgPath.value),width: 100,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).make(),
+                      : Image.file(File(controller.profilrIMgPath.value),width: 80,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).width(80).make(),
 
 
                 10.heightBox,
@@ -87,8 +87,17 @@ class EditProfileScreen extends StatelessWidget {
                     controller.profileImageLink = data['imageUrl'];
                   }
 
+                  //if user only want to update image thenwe should not ask it for old pass
+                  if(controller.oldpassController.text.length == 0 && controller.newpassController.text.length==0 ){
+                    await controller.updateProfile(
+                        imgUrl: controller.profileImageLink ,
+                        name: controller.nameController.text,
+                        password: data['password']
+                    );
+                  }
+
                   //if old password matches then update the new password
-                  if(controller.oldpassController.text == data['password']){
+                  else if(controller.oldpassController.text == data['password']){
                     await controller.changeAuthPassword(
                         email: data['email'],
                         oldpass: controller.oldpassController.text,

@@ -1,6 +1,7 @@
 import 'package:e_mart/category_screen/item_details.dart';
 import 'package:e_mart/consts/consts.dart';
 import 'package:e_mart/consts/list.dart';
+import 'package:e_mart/controller/product_controller.dart';
 import 'package:e_mart/widgets_common/bg_widget.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +11,9 @@ class CategoryDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var productController = Get.find<ProductController>();
+
     return bgWidget(
       child: Scaffold(
         appBar: AppBar(
@@ -19,8 +23,8 @@ class CategoryDetails extends StatelessWidget {
           children: [
             20.heightBox,
             Row(
-              children: List.generate(kidsSectionList.length,
-                      (index) => kidsSectionList[index].text.color(fontGrey).fontFamily(bold).make().box.white.padding(EdgeInsets.all(12)).height(40).roundedSM.margin(EdgeInsets.symmetric(horizontal: 6)).make(),
+              children: List.generate(productController.subcat.length,
+                      (index) => productController.subcat[index].toString().text.color(fontGrey).fontFamily(bold).make().box.white.padding(EdgeInsets.all(12)).height(40).roundedSM.margin(EdgeInsets.symmetric(horizontal: 6)).make(),
               ).toList(),
             ).scrollHorizontal(physics: BouncingScrollPhysics()),
             20.heightBox,

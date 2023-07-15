@@ -45,14 +45,14 @@ class ProfileController extends GetxController{
     profileImageLink = await ref.getDownloadURL();
   }
 
-  //update on firebase
+  //update on firebase  -> FirebaseFirestore.instance me users collection me imgurl of update kar rahe h and then merge kar dege taki updat eho jaye
   updateProfile({name,password,imgUrl}) async{
     var store  = firestore.collection(userCollection).doc(currentUser!.uid);
      await store.set({
       'name' : name,
       'password' : password,
       'imageUrl' : imgUrl,
-    },SetOptions(merge: true));
+    },SetOptions(merge: true));            //merge used when we over write the users value
      isloading(false);
   }
 

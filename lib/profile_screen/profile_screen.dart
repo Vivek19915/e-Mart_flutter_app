@@ -45,8 +45,8 @@ class ProfileScreen extends StatelessWidget {
                       Row(
                         children: [
                           //changing image after updating
-                          if(data_user['imageUrl']=='')Image.asset(imgProfile2,width: 100,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).make()
-                          else Image.network(data_user['imageUrl'],width: 100,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).make(),
+                          if(data_user['imageUrl']=='')Image.asset(imgProfile2,width: 80,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).make()
+                          else Image.network(data_user['imageUrl'],width: 80,fit: BoxFit.cover,).box.roundedFull.clip(Clip.antiAlias).make(),
 
                           10.widthBox,
                           Expanded(

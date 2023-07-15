@@ -15,7 +15,7 @@ class signupScreen extends StatefulWidget {
 }
 
 class _signupScreenState extends State<signupScreen> {
-  bool ? ischeck = false;
+  bool ? ischeck = false;                  // for check box---->>>>>>>
   //controller
   var controller = Get.put(AuthController());
 
@@ -87,6 +87,8 @@ class _signupScreenState extends State<signupScreen> {
                     ],
                   ),
                   10.heightBox,
+
+
                   if(controller.isloading==true)  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(redColor),)
                   else ourButton(title: signup ,buttoncolor: ischeck==true? redColor:lightGrey,textcolor: whiteColor,
                       onpress: () async {
@@ -97,17 +99,20 @@ class _signupScreenState extends State<signupScreen> {
                                 useremail: emailController.text,
                                 userpassword: passwordController.text)
                                 .then((value) {
+                                  // jese hi signup hojaye database me info store kar lege
                               return controller.storeUserData(
                                   email: emailController.text,
                                   name: nameController.text,
                                   password: passwordController.text);
                             }).then((value) {
-                              // VxToast.show(context, msg: "Logged in Succesfully");
+                              // ab databse ,me stre hone ke baad jab return hoga then go to home screen
+                              VxToast.show(context, msg: "Logged in Succesfully");
                               Get.offAll(() => const Home());
                             });
                           }
                           catch (e) {
                             controller.isloading(false);
+                            //and by chance koi error aata h toh signout karva dege user ko
                             auth.signOut();
                             VxToast.show(context, msg: e.toString());
                           }

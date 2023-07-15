@@ -41,8 +41,9 @@ class AuthController extends GetxController{
 
 
   //storing data on firebase store
+  // here one collection is made on firestore of name userCollection where with particular userid we set some things relted to that user
   storeUserData({name,password,email})async{
-    DocumentReference store = await firestore.collection(userCollection).doc(currentUser!.uid);
+    DocumentReference store = await firestore.collection(userCollection).doc(currentUser!.uid);  ////or we can wrire -->FirebaseFirestore.instance.collection("users")
     store.set({
       'name' : name,
       'password' : password,
