@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 
 class ProductController extends GetxController{
 
+  var quantity = 0.obs;                      //to store quantity of product chose by user
+  var colorChosenIndex = 0.obs;             //color selected by user
+
   var subcat = [];
   //function to get subCategories from json model
   getSubCategories({title}) async {
@@ -19,4 +22,19 @@ class ProductController extends GetxController{
       subcat.add(i);
     }
   }
+
+
+  increaseQunatity( String maxquantity){
+    int a = int.parse(maxquantity);
+    if(a>quantity.value){
+      quantity.value++;
+    }
+  }
+
+  decreaseQunatity(){
+    if(quantity.value>0){
+      quantity.value--;
+    }
+  }
+
 }

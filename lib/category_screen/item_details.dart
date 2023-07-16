@@ -1,4 +1,7 @@
 import 'package:e_mart/consts/consts.dart';
+import 'package:e_mart/controller/product_controller.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../consts/list.dart';
 import '../views/home_screen/components/featured_product_button.dart';
@@ -7,26 +10,31 @@ import '../widgets_common/our_button.dart';
 class ItemDetails extends StatefulWidget {
   //same way me title get kar lege
   final String ? title;
+  final dynamic data;
   final image;
   final String ? price;
-  const ItemDetails({super.key, this.title, this.image, this.price});
+  const ItemDetails({super.key, this.title, this.image, this.price, this.data});
 
   @override
   State<ItemDetails> createState() => _ItemDetailsState();
 }
 
 class _ItemDetailsState extends State<ItemDetails> {
+
+
+
   @override
   Widget build(BuildContext context) {
+
+    var productController = Get.find<ProductController>();
 
     int count = 0;
     bool isExpanded = false;
 
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: widget.title!.text.fontFamily(bold).color(darkFontGrey).make(),
+        title: widget.data['p_name'].toString()!.text.fontFamily(bold).color(darkFontGrey).make(),
         //actions is used to apllya ction on app bar
         actions: [
           IconButton(onPressed: (){}, icon:Icon(Icons.share)),
@@ -47,32 +55,35 @@ class _ItemDetailsState extends State<ItemDetails> {
                         aspectRatio: 16/9,
                         autoPlay: true,
                         height: 350,
+                        viewportFraction: 1.0,
                         autoPlayCurve: Curves.fastOutSlowIn,
-                        itemCount: 4,
+                        itemCount: widget.data['p_imgs'].length,
                         itemBuilder: (context,index){
-                          return Image.asset(widget.image,width: double.infinity,fit: BoxFit.cover).box.padding(EdgeInsets.symmetric(horizontal: 10)).make();
+                          return Image.network(widget.data['p_imgs'][index],width: double.infinity,fit: BoxFit.cover).box.padding(EdgeInsets.symmetric(horizontal: 10)).make();
                         }
                     ),
 
 
                     //title ans details section
                     10.heightBox,
-                    widget.title!.text.size(16).color(darkFontGrey).fontFamily(semibold).make(),
+                    widget.data["p_name"].toString().text.size(16).color(darkFontGrey).fontFamily(semibold).make(),
 
                     //rating sysytem --->Velocityx
                     10.heightBox,
                     VxRating(
+                      isSelectable: false,   //so that rating wont change
+                      value: double.parse(widget.data['p_rating']),
                       onRatingUpdate: (value){},
                       normalColor: textfieldGrey,
                       selectionColor: golden,
-                      count: 5,
+                      count: 5 ,
+                      maxRating: 5,
                       size: 25,
-                      stepInt: true,
                     ),
 
                     //price
                     10.heightBox,
-                    widget.price!.text.color(redColor).fontFamily(bold).size(18).make(),
+                    widget.data['p_price'].toString().text.color(redColor).fontFamily(bold).size(18).make(),
 
                     //seller contect section
                     10.heightBox,
@@ -84,7 +95,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                           children: [
                             "Seller".text.color(darkFontGrey).fontFamily(semibold).make(),
                             5.heightBox,
-                            "In House Brands".text.fontFamily(semibold).color(darkFontGrey).size(16).make(),
+                            widget.data['p_seller'].toString().text.fontFamily(semibold).color(darkFontGrey).size(16).make(),
                           ],
                         )),
 
@@ -106,49 +117,70 @@ class _ItemDetailsState extends State<ItemDetails> {
                               width: 150,
                               child: "Color: ".text.color(textfieldGrey).size(22).make(),
                             ),
-                            //color row
-                            Row(
-                              children: List.generate(10,
-                                      (index) => VxBox().size(40, 40).roundedFull.color(Vx.randomPrimaryColor).margin(EdgeInsets.symmetric(horizontal: 4)).make(),
-                              ),
-                            ).scrollHorizontal().expand()
+
+
+                            //color row  --> making tick opertaion on color choosen by user
+                            Obx(()=> Row(
+                                children: List.generate(widget.data['p_colors'].length,
+                                        (index) => Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            VxBox().size(40, 40).roundedFull.color(Color(widget.data['p_colors'][index])).margin(EdgeInsets.symmetric(horizontal: 4)).make()
+                                            .onTap(() {
+                                              productController.colorChosenIndex.value  = index;
+                                            }),
+                                            //whatever color we choose this will show tick on it
+                                            Visibility(
+                                                visible: index == productController.colorChosenIndex.value,
+                                                child: Icon(Icons.done,color: Colors.white,)
+                                            )
+                                          ],
+                                        ),
+                                ),
+                              ).scrollHorizontal().expand(),
+                            )
 
                           ],
                         ).box.padding(EdgeInsets.all(8)).make(),
 
 
                         //quantity row
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 150,
-                              child: "Quantity: ".text.color(textfieldGrey).size(22).make(),
-                            ),
-                            Row(
-                              children: [
-                                IconButton(onPressed: (){count--;}, icon: Icon(Icons.remove)),
-                                "0".text.size(16).color(darkFontGrey).fontFamily(bold).make(),
-                                IconButton(onPressed: (){count++;}, icon: Icon(Icons.add)),
-                                "(0 available)".text.color(textfieldGrey).make(),
-                              ],
-                            ).scrollHorizontal().expand(),
-                          ],
-                        ).box.padding(EdgeInsets.all(8)).make(),
+                        Obx(()=> Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 150,
+                                child: "Quantity: ".text.color(textfieldGrey).size(22).make(),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(onPressed: (){productController.decreaseQunatity();}, icon: Icon(Icons.remove)),
+                                  productController.quantity.toString().text.size(16).color(darkFontGrey).fontFamily(bold).make(),
+                                  IconButton(onPressed: (){productController.increaseQunatity(widget.data['p_quantity']);}, icon: Icon(Icons.add)),
+                                  "(${widget.data['p_quantity']} available)".text.color(textfieldGrey).make(),
+                                ],
+                              ).scrollHorizontal().expand(),
+                            ],
+                          ).box.padding(EdgeInsets.all(8)).make(),
+                        ),
 
 
 
                         //total price
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 150,
-                              child: "Total Price: ".text.color(textfieldGrey).size(22).make(),
-                            ),
-                            "\$0.00".text.color(redColor).size(16).fontFamily(bold).make(),
-                          ],
-                        ).box.padding(EdgeInsets.all(8)).make(),
+                        Obx(()=> Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 150,
+                                child: "Total Price: ".text.color(textfieldGrey).size(22).make(),
+                              ),
+                              //op----> making this OBX and showing price accordingly
+                              // widget.data['p_price'] --> in string so first convert it to double
+                              //the final product convert it to to string
+                              (productController.quantity*double.parse(widget.data['p_price'])).toString().text.color(redColor).size(16).fontFamily(bold).make(),
+                            ],
+                          ).box.padding(EdgeInsets.all(8)).make(),
+                        ),
 
 
                         //descriptions section
@@ -156,13 +188,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                         Align(alignment:Alignment.centerLeft, child: "Description".text.color(darkFontGrey).fontFamily(semibold).make()),
                         10.heightBox,
                         Text(
-                          'Long text content goes here............Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam aliquam, nisl a tempor eleifend, ligula felis consequat nulla, eu pellentesque eros nisi eget mauris. Sed interdum, lorem sed condimentum fringilla, justo risus fringilla odio, nec ultrices odio lectus et est. Nam fermentum turpis eget ex placerat, eu eleifend sapien convallis. Duis pulvinar quam id sem luctus, id lacinia nibh scelerisque. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Mauris id dui finibus, efficitur ex id, fermentum nunc. Donec sit amet erat a ex sagittis eleifend id sit amet nisl. Fusce sem ex, tincidunt sit amet iaculis ac, consequat et lectus. Curabitur dignissim neque vel tortor finibus, sed feugiat orci condimentum. In sollicitudin bibendum enim id vestibulum. Mauris id diam a neque efficitur sollicitudin. Integer sit amet risus sapien. Etiam vulputate posuere vulputate.',
+                          widget.data['p_desc'].toString(),
                           maxLines: isExpanded ? null : 3, // Maximum number of lines to show initially
                           overflow: TextOverflow.ellipsis,
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            isExpanded =true; // Set the expanded state to true
+                            isExpanded = true; // Set the expanded state to true
                             setState(() {
 
                             });
