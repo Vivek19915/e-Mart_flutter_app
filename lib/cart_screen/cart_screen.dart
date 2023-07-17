@@ -56,7 +56,7 @@ class CartScreen extends StatelessWidget {
 
                       );
                     }
-                ).box.color(Colors.white).make().expand(),
+                ).box.color(Colors.grey.shade300).make().expand(),
 
                 Obx(
                       ()=> Row(

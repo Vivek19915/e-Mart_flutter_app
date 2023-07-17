@@ -41,12 +41,30 @@ class _ItemDetailsState extends State<ItemDetails> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: widget.data['p_name'].toString()!.text.fontFamily(bold).color(darkFontGrey).make(),
+
+
+
         //actions is used to apllya ction on app bar
         actions: [
           IconButton(onPressed: (){}, icon:Icon(Icons.share)),
-          IconButton(onPressed: (){}, icon:Icon(Icons.favorite_outline)),
+          Obx(()=> IconButton(onPressed: (){
+              if(productController.isFav.value){
+                productController.removeFromWishlist(widget.data.id,context);
+              }
+              else{
+                productController.addToWishlist(widget.data.id,context);
+              }
+            }, icon:Icon(
+                Icons.favorite_outlined),
+                color: productController.isFav.value ? redColor : darkFontGrey,
+            ),
+          ),
         ],
       ),
+
+
+
+
       body: Column(
         children: [
           Expanded(

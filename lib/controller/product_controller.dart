@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_mart/consts/consts.dart';
 import 'package:e_mart/models/category_model.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,8 @@ class ProductController extends GetxController{
 
   var quantity = 0.obs;                      //to store quantity of product chose by user
   var colorChosenIndex = 0.obs;             //color selected by user
+
+  var isFav = false.obs;      //is that product in your wishlist or not
 
   var subcat = [];
   //function to get subCategories from json model
@@ -59,4 +62,30 @@ class ProductController extends GetxController{
     colorChosenIndex.value = 0;
   }
 
+
+  //adding and removing product from wishlist
+  addToWishlist(docId,context)async{
+    await firestore.collection(productsCollection).doc(docId).set({
+      'p_wishlist' : FieldValue.arrayUnion([currentUser!.uid])
+    },SetOptions(merge: true));
+    isFav(true);
+    VxToast.show(context, msg: "Added to wishlist");
+  }
+
+  removeFromWishlist(docId,context)async{
+    await firestore.collection(productsCollection).doc(docId).set({
+      'p_wishlist' : FieldValue.arrayRemove([currentUser!.uid])
+    },SetOptions(merge: true));
+    isFav(false);
+    VxToast.show(context, msg: "Removed from wishlist");
+  }
+
+
+  // this function will check that --> when our user id is present in product wishlist or not if present then fav else not
+  checkIsFav(data)async{
+   if(data['p_wishlist'].contains(currentUser!.uid)){
+     isFav(true);
+   }
+   else isFav(false);
+  }
 }

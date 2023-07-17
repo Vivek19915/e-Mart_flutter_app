@@ -70,8 +70,9 @@ class CategoryDetails extends StatelessWidget {
                                   10.heightBox,
                                   data[index]['p_price'].toString().numCurrency.text.color(redColor).size(20).make(),
                                 ],
-                              ).box.white.roundedSM.shadowSm.margin(EdgeInsets.all(6)).padding(EdgeInsets.all(12)).make().onTap(() {
-
+                              ).box.white.roundedSM.shadowSm.margin(EdgeInsets.all(6)).padding(EdgeInsets.all(12)).make().
+                              onTap(() {
+                                productController.checkIsFav(data[index]);
                                 Get.to(()=>ItemDetails(title: data[index]['p_name'].toString(),image: data[index]['p_imgs'][0],price: featuredProductPrice[index].toString(),data: data[index]));     //this data passing is OPOPoopp
 
                               });
