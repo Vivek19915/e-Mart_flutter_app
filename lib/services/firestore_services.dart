@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_mart/consts/consts.dart';
 
 class FirestoreServices {
@@ -22,5 +23,12 @@ class FirestoreServices {
   //to delete any document using document id
   static deleteDocument(docID){
     return firestore.collection(cartCollection).doc(docID).delete();
+  }
+
+
+  //get all chat messages
+   static getChatMessages(docId) {
+    //print msg by sorting on created on filed
+     return FirebaseFirestore.instance.collection(chatsCollection).doc(docId).collection(messagesCollection).orderBy('created_on',descending: false).snapshots();
   }
 }

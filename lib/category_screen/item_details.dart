@@ -1,5 +1,6 @@
 import 'package:e_mart/consts/consts.dart';
 import 'package:e_mart/controller/product_controller.dart';
+import 'package:e_mart/views/chat_screen/chat_screen.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
@@ -107,7 +108,9 @@ class _ItemDetailsState extends State<ItemDetails> {
                         const CircleAvatar(
                           backgroundColor: Colors.white,
                           child: Icon(Icons.message_rounded,color: darkFontGrey,),
-                        ),
+                        ).onTap(() {
+                          Get.to(()=>ChatScreen(),arguments: [widget.data['p_seller'], widget.data['vendor_id']]);
+                        }),
                       ],
                     ).box.height(60).padding(EdgeInsets.symmetric(horizontal: 16)).color(lightGrey).make(),
 
