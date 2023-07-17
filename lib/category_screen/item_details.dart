@@ -20,20 +20,25 @@ class ItemDetails extends StatefulWidget {
 }
 
 class _ItemDetailsState extends State<ItemDetails> {
+  var productController = Get.find<ProductController>();
+  var isExpanded = 3;     //delecaring outside build so that we satesate called is isExpanded not gain declear to 3
 
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    productController.resetValues();     //so that all previous values become zero
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    var productController = Get.find<ProductController>();
-
     int count = 0;
-    bool isExpanded = false;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: widget.data['p_name'].toString()!.text.fontFamily(bold).color(darkFontGrey).make(),
         //actions is used to apllya ction on app bar
         actions: [
@@ -189,14 +194,13 @@ class _ItemDetailsState extends State<ItemDetails> {
                         10.heightBox,
                         Text(
                           widget.data['p_desc'].toString(),
-                          maxLines: isExpanded ? null : 3, // Maximum number of lines to show initially
+                          maxLines: isExpanded, // Maximum number of lines to show initially
                           overflow: TextOverflow.ellipsis,
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            isExpanded = true; // Set the expanded state to true
                             setState(() {
-
+                              isExpanded = 100; // Set the expanded state to true
                             });
                           },
                           child: Text('View More'),
@@ -217,18 +221,18 @@ class _ItemDetailsState extends State<ItemDetails> {
                         ),
                         20.heightBox,
 
-                        //produts like section
+                        //products like section
                         "Products you may also like".text.fontFamily(bold).size(16).color(darkFontGrey).make(),
                         10.heightBox,
                         Row(
                           children:List.generate(featuredProducttitles.length, (index) => Container(
                             child: featuredProductButton(title: featuredProducttitles[index] , price: featuredProductPrice[index],image: featuredProductImages[index]),
                           )).toList(),
-                        ).scrollHorizontal(),
+                        ).scrollHorizontal().box.make(),
 
 
                       ],
-                    ).box.white.shadowSm.make()
+                    ).box.white.margin(EdgeInsets.symmetric(vertical: 10)).make()
                   ],
                 ).scrollVertical().expand(),
 
@@ -240,7 +244,18 @@ class _ItemDetailsState extends State<ItemDetails> {
             height: 60,
             child: ourButton(
               title: "Add To Cart",
-              onpress: (){},
+              onpress: (){
+                productController.addToCart(
+                  title: widget.data['p_name'],
+                  color: widget.data['p_colors'][productController.colorChosenIndex.value],
+                  img: widget.data['p_imgs'][0],
+                  context: context,
+                  quantity: productController.quantity.value,
+                  sellername: widget.data['p_seller'],
+                  total_price: (productController.quantity*int.parse(widget.data['p_price'])).toString(),
+                );
+                VxToast.show(context, msg: "Added to Cart");
+              },
               textcolor: whiteColor,
               buttoncolor: redColor,
             ),

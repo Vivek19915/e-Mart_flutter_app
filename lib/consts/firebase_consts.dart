@@ -9,3 +9,4 @@ User? currentUser = auth.currentUser;                                   //?--NUL
 //collections names that are used in database like users and drivers when you use in fire storage.instance.collection(userCollection)
 const userCollection = "users";
 const productsCollection = "products";
+const cartCollection = "cart";

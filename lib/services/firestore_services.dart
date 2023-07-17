@@ -12,4 +12,15 @@ class FirestoreServices {
   static getProduct(category){
     return firestore.collection(productsCollection).where('p_category',isEqualTo:category).snapshots();
   }
+
+
+  //get cart --> it willl get cart using user->id
+  static getCart(uid){
+    return firestore.collection(cartCollection).where('added_by',isEqualTo: uid).snapshots();
+  }
+
+  //to delete any document using document id
+  static deleteDocument(docID){
+    return firestore.collection(cartCollection).doc(docID).delete();
+  }
 }

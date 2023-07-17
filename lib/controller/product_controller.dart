@@ -1,3 +1,4 @@
+import 'package:e_mart/consts/consts.dart';
 import 'package:e_mart/models/category_model.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -35,6 +36,27 @@ class ProductController extends GetxController{
     if(quantity.value>0){
       quantity.value--;
     }
+  }
+
+
+  addToCart({title,img,sellername,color,quantity,total_price,context})async{
+    await firestore.collection(cartCollection).doc().set({         //as here we dont sepcify current suer id in doc then why whnever add to cart is called an new id is map on databse and new instance will create while if we provide doc id then it will update each time the values
+      'title' : title,
+      'img': img,
+      'seller_name' : sellername,
+      'color': color,
+      'quantity': quantity,
+      'total_price': total_price.toString(),
+      'added_by': currentUser!.uid,
+    }).catchError((error){
+      VxToast.show(context, msg: error.toString());
+    });
+  }
+
+
+  resetValues(){
+    quantity.value = 0;
+    colorChosenIndex.value = 0;
   }
 
 }

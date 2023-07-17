@@ -21,6 +21,7 @@ class CategoryDetails extends StatelessWidget {
     return bgWidget(
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: title!.text.fontFamily(bold).white.make(),
         ),
         //for real time changes we use stream builder and fetch data from firebase
