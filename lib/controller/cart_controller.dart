@@ -20,6 +20,8 @@ class CartController extends GetxController{
 
   late dynamic productSnapshot;
 
+  var products = [];
+
   calulate(data){
     total_price.value=0;
     for(var i = 0 ; i<data.length ; i++ ){
@@ -32,8 +34,12 @@ class CartController extends GetxController{
   }
 
 
-  placeMyOrder({orderPaymentMethod , totalAmount})async{
+  placeMyOrder({required orderPaymentMethod ,required totalAmount})async{
+
+    await getProductsDetails();
+
     await firestore.collection(ordersCollection).doc().set({
+      //this is mapping
       'order_code': "233981237",
       'order_date': FieldValue.serverTimestamp(),
       'order_by': currentUser!.uid,
@@ -47,9 +53,28 @@ class CartController extends GetxController{
       'shipping_method': "Home Delivery",
       'payment_method': orderPaymentMethod,
       'order_placed': true,
+      'order_confirmed': false,
+      'order_delivered': false,
+      'order_on_delivery': false,
       'total_amount': totalAmount,
-
+      'orders': FieldValue.arrayUnion(products),      //products list contain all info about product order by user
     });
+  }
+
+
+//this function will get details of each product in from of map and store it in list
+  getProductsDetails(){
+    products.clear();
+    for(int i=0 ;  i < productSnapshot.length; i++){
+      products.add({
+        //this is mapping and storing in list
+        'color':productSnapshot[i]['color'],
+        'img':productSnapshot[i]['img'],
+        'quantity':productSnapshot[i]['quantity'],
+        'title':productSnapshot[i]['title'],
+      });
+    }
+    print(products);
   }
 
 }

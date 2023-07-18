@@ -24,7 +24,12 @@ class PaymentMethods extends StatelessWidget {
           title: "Place Order",
           textcolor: whiteColor,
           buttoncolor: redColor,
-          onpress: (){}
+          onpress: (){
+            cartController.placeMyOrder(
+              orderPaymentMethod: paymentMethodList[cartController.paymentIndex.value],
+              totalAmount: cartController.total_price.value
+            );
+          }
       ).box.height(50).make(),
 
 

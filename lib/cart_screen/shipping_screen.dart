@@ -23,12 +23,12 @@ class ShippingDetailsScreen extends StatelessWidget {
         textcolor: whiteColor,
         buttoncolor: redColor,
         onpress: (){
-          // if(cartController.addressController.text.length == 0 || cartController.stateController.text.length == 0 ||cartController.postal_code_Controller.text.length == 0 || cartController.cityController.text.length == 0 || cartController.phoneController.text.length == 0 ){
-          //   VxToast.show(context, msg: "Please fill all fields");
-          // }
-          // else{
+          if(cartController.addressController.text.length == 0 || cartController.stateController.text.length == 0 ||cartController.postal_code_Controller.text.length == 0 || cartController.cityController.text.length == 0 || cartController.phoneController.text.length == 0 ){
+            VxToast.show(context, msg: "Please fill all fields");
+          }
+          else{
             Get.to(()=>PaymentMethods());
-          // }
+          }
         }
       ).box.height(50).make(),
 
