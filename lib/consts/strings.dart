@@ -50,3 +50,10 @@ const wishlist = "My Wishlist",
     messages = "Messages";
 
 
+
+//payment method strings
+const paypal = "Paypal";
+const paytm = "Paytm";
+const cod = "Cash on Delivery";
+
+

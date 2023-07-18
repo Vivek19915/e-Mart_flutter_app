@@ -26,3 +26,8 @@ var itemDetailButtonList = [video,reviews,privcaypolicy,returnpolicy,sellerpolic
 var profileButtonList = ["My Wallet",orders,wishlist,"Earned Points","Refund Request",messages];
 var profileButtonImages = [imgWallet,icOrder,icOrders,icPoints,icRefund,icMessages];
 
+
+//payments methods
+var paymentMethodImages = [imgPaypal,imgPaytm,imgCod];
+var paymentMethodList = [paypal,paytm,cod];
+

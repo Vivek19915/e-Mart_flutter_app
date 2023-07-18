@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_mart/cart_screen/shipping_screen.dart';
 import 'package:e_mart/consts/consts.dart';
 import 'package:e_mart/controller/cart_controller.dart';
 import 'package:e_mart/services/firestore_services.dart';
@@ -37,7 +38,7 @@ class CartScreen extends StatelessWidget {
             // means data is present on firebase for cart
             var data = snapshot.data!.docs;
             cartController.calulate(data);
-
+            cartController.productSnapshot = data;       //so that we can use it further in other screens
 
             return Column(
               children: [
@@ -71,7 +72,9 @@ class CartScreen extends StatelessWidget {
                 //proceed to shipping Button
                 ourButton(
                     title: "Proceed to shipping",
-                    onpress: (){},
+                    onpress: (){
+                      Get.to(()=>ShippingDetailsScreen());
+                    },
                     buttoncolor: redColor,
                     textcolor: whiteColor
                 ).box.width(Get.width-60).make()
