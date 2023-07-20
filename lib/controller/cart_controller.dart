@@ -22,6 +22,8 @@ class CartController extends GetxController{
 
   var products = [];
 
+  var placingOrder = false.obs;
+
   calulate(data){
     total_price.value=0;
     for(var i = 0 ; i<data.length ; i++ ){
@@ -36,6 +38,7 @@ class CartController extends GetxController{
 
   placeMyOrder({required orderPaymentMethod ,required totalAmount})async{
 
+    placingOrder(true);
     await getProductsDetails();
 
     await firestore.collection(ordersCollection).doc().set({
@@ -59,6 +62,7 @@ class CartController extends GetxController{
       'total_amount': totalAmount,
       'orders': FieldValue.arrayUnion(products),      //products list contain all info about product order by user
     });
+    placingOrder(false);
   }
 
 
@@ -70,11 +74,25 @@ class CartController extends GetxController{
         //this is mapping and storing in list
         'color':productSnapshot[i]['color'],
         'img':productSnapshot[i]['img'],
+        'vendor_id':productSnapshot[i]['vendor_id'],
+        'total_price':productSnapshot[i]['total_price'],
         'quantity':productSnapshot[i]['quantity'],
         'title':productSnapshot[i]['title'],
       });
     }
     print(products);
   }
+
+
+
+  //as orders got placed then products in cart are of no value -->therefore we clear cart after order placed
+  clearCart(){
+    for(int i = 0 ; i <productSnapshot.length ; i++){
+      firestore.collection(cartCollection).doc(productSnapshot[i].id).delete();
+    }
+  }
+
+
+
 
 }

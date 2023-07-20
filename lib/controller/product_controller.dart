@@ -42,7 +42,7 @@ class ProductController extends GetxController{
   }
 
 
-  addToCart({title,img,sellername,color,quantity,total_price,context})async{
+  addToCart({title,img,sellername,color,quantity,total_price,context,vendor_id})async{
     await firestore.collection(cartCollection).doc().set({         //as here we dont sepcify current suer id in doc then why whnever add to cart is called an new id is map on databse and new instance will create while if we provide doc id then it will update each time the values
       'title' : title,
       'img': img,
@@ -51,6 +51,7 @@ class ProductController extends GetxController{
       'quantity': quantity,
       'total_price': total_price.toString(),
       'added_by': currentUser!.uid,
+      'vendor_id' : vendor_id,
     }).catchError((error){
       VxToast.show(context, msg: error.toString());
     });

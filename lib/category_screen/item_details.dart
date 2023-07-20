@@ -266,16 +266,23 @@ class _ItemDetailsState extends State<ItemDetails> {
             child: ourButton(
               title: "Add To Cart",
               onpress: (){
-                productController.addToCart(
-                  title: widget.data['p_name'],
-                  color: widget.data['p_colors'][productController.colorChosenIndex.value],
-                  img: widget.data['p_imgs'][0],
-                  context: context,
-                  quantity: productController.quantity.value,
-                  sellername: widget.data['p_seller'],
-                  total_price: (productController.quantity*int.parse(widget.data['p_price'])).toString(),
-                );
-                VxToast.show(context, msg: "Added to Cart");
+                if(productController.quantity>0){
+                  productController.addToCart(
+                      title: widget.data['p_name'],
+                      color: widget.data['p_colors'][productController.colorChosenIndex.value],
+                      img: widget.data['p_imgs'][0],
+                      context: context,
+                      quantity: productController.quantity.value,
+                      sellername: widget.data['p_seller'],
+                      total_price: (productController.quantity*int.parse(widget.data['p_price'])).toString(),
+                      vendor_id: widget.data['vendor_id']
+                  );
+                  VxToast.show(context, msg: "Added to Cart");
+                }
+                else {
+                  VxToast.show(context, msg: "Please add quantity!");
+                }
+
               },
               textcolor: whiteColor,
               buttoncolor: redColor,

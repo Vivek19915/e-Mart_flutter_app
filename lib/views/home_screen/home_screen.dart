@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_mart/category_screen/item_details.dart';
 import 'package:e_mart/consts/consts.dart';
 import 'package:e_mart/consts/list.dart';
+import 'package:e_mart/services/firestore_services.dart';
 import 'package:e_mart/views/home_screen/components/featured_button.dart';
 import 'package:e_mart/views/home_screen/components/featured_product_button.dart';
 import 'package:e_mart/widgets_common/home_buttons.dart';
+import 'package:e_mart/widgets_common/loading_indicator.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -141,23 +146,41 @@ class HomeScreen extends StatelessWidget {
                 //all products section
                 // --->>> for this we will use grid view
                 20.heightBox,
-                GridView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,   //since we are using it in side coloumn
-                    itemCount: featuredProducttitles.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 8,crossAxisSpacing: 8,mainAxisExtent: 270),
-                    itemBuilder: (context,index){
-                      return Column(
-                        children: [
-                          Image.asset(featuredProductImages[index],width: 180,fit: BoxFit.fill,),
-                          10.heightBox,
-                          featuredProducttitles[index].text.color(fontGrey).make(),
-                          10.heightBox,
-                          featuredProductPrice[index].text.color(redColor).size(24).make(),
-                        ],
-                      ).box.white.roundedSM.shadowSm.margin(EdgeInsets.all(6)).make();
-                    }
-                ),
+
+                StreamBuilder(
+                    stream: FirestoreServices.getAllProducts(),
+                    builder: (BuildContext context , AsyncSnapshot<QuerySnapshot> snapshot){
+                      if(snapshot.hasData == false){
+                        return Container(child: loadingIndicator(),);
+                      }
+                      else {
+                        var data = snapshot.data!.docs;
+
+                        return  GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,   //since we are using it in side coloumn
+                            itemCount: data.length,
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,mainAxisSpacing: 8,crossAxisSpacing: 8,mainAxisExtent: 240),
+                            itemBuilder: (context,index){
+                              return Column(
+                                children: [
+                                  Image.network(data[index]['p_imgs'][0],width: 180,height: 120,fit: BoxFit.fitHeight,).box.padding(EdgeInsets.all(12)).make(),
+                                  data[index]['p_name'].toString().text.color(fontGrey).make(),
+                                  10.heightBox,
+                                  data[index]['p_price'].toString().numCurrency.text.color(redColor).size(22).make(),
+                                ],
+                              ).onTap(() {
+                                Get.to(()=>ItemDetails(
+                                  title: data[index]['p_name'],
+                                  data: data[index],
+                                ));
+                              }).box.white.roundedSM.shadowSm.margin(EdgeInsets.all(6)).make();
+                            }
+                        );
+                      }
+                    })
+
+
 
 
 
