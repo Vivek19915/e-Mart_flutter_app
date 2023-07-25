@@ -106,7 +106,7 @@ class _signupScreenState extends State<signupScreen> {
                                   password: passwordController.text);
                             }).then((value) {
                               // ab databse ,me stre hone ke baad jab return hoga then go to home screen
-                              VxToast.show(context, msg: "Logged in Succesfully");
+                              VxToast.show(context, msg: "Sign up Succesfully");
                               Get.offAll(() => const Home());
                             });
                           }
@@ -114,7 +114,7 @@ class _signupScreenState extends State<signupScreen> {
                             controller.isloading(false);
                             //and by chance koi error aata h toh signout karva dege user ko
                             auth.signOut();
-                            VxToast.show(context, msg: e.toString());
+                            VxToast.show(context, msg: "eeeeeeeeeeeee");
                           }
                         }
                       }

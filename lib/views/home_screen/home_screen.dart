@@ -118,11 +118,39 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       "Featured Products".text.fontFamily(bold).white.size(22).make(),
                       10.heightBox,
-                      Row(
-                        children:List.generate(featuredProducttitles.length, (index) => Container(
-                          child: featuredProductButton(title: featuredProducttitles[index] , price: featuredProductPrice[index],image: featuredProductImages[index]),
-                        )).toList(),
-                      ).scrollHorizontal(),
+
+                      StreamBuilder(
+                          stream: FirestoreServices.getFeaturedProduct(),
+                          builder: (BuildContext context , AsyncSnapshot<QuerySnapshot>snapshot){
+                            if(snapshot.hasData == false){
+                              return Center(child: loadingIndicator(),);
+                            }
+                            else if(snapshot.data!.docs.isEmpty){
+                              return "No Featured product available right now !!!!".text.make();
+                            }
+                            else{
+
+                              var featuredData = snapshot.data!.docs;
+
+                              return Row(
+                                children:List.generate(featuredData.length, (index) => Container(
+                                  child: featuredProductButton1(title: featuredData[index]['p_name'].toString() , price: featuredData[index]['p_price'].toString(),image: featuredData[index]['p_imgs'][0]),
+                                ).box.height(250).width(200).make().onTap(() {
+
+
+                                  Get.to(()=>ItemDetails(
+                                    title: featuredData[index]['p_name'],
+                                    data: featuredData[index],
+                                  ));
+
+
+
+
+                                })).toList(),
+                              ).scrollHorizontal();
+                            }
+                          }),
+
                     ],
                   ),
                 ),
@@ -164,8 +192,8 @@ class HomeScreen extends StatelessWidget {
                             itemBuilder: (context,index){
                               return Column(
                                 children: [
-                                  Image.network(data[index]['p_imgs'][0],width: 180,height: 120,fit: BoxFit.fitHeight,).box.padding(EdgeInsets.all(12)).make(),
-                                  data[index]['p_name'].toString().text.color(fontGrey).make(),
+                                  Image.network(data[index]['p_imgs'][0],width: 180,height: 120,fit: BoxFit.cover,).box.roundedSM.clip(Clip.antiAlias).margin(EdgeInsets.all(12)).make(),
+                                  data[index]['p_name'].toString().text.color(fontGrey).make().box.margin(EdgeInsets.symmetric(horizontal: 10)).make(),
                                   10.heightBox,
                                   data[index]['p_price'].toString().numCurrency.text.color(redColor).size(22).make(),
                                 ],
@@ -179,14 +207,6 @@ class HomeScreen extends StatelessWidget {
                         );
                       }
                     })
-
-
-
-
-
-
-
-
               ],
             ).scrollVertical().expand(),                            //  -->>making scrollable and expanded widget
           ],

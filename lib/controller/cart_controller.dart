@@ -21,6 +21,7 @@ class CartController extends GetxController{
   late dynamic productSnapshot;
 
   var products = [];
+  var vendorsList=[];
 
   var placingOrder = false.obs;
 
@@ -61,6 +62,7 @@ class CartController extends GetxController{
       'order_on_delivery': false,
       'total_amount': totalAmount,
       'orders': FieldValue.arrayUnion(products),      //products list contain all info about product order by user
+      'vendors':FieldValue.arrayUnion(vendorsList),
     });
     placingOrder(false);
   }
@@ -69,7 +71,9 @@ class CartController extends GetxController{
 //this function will get details of each product in from of map and store it in list
   getProductsDetails(){
     products.clear();
+    vendorsList.clear();
     for(int i=0 ;  i < productSnapshot.length; i++){
+      vendorsList.add(productSnapshot[i]['vendor_id']);
       products.add({
         //this is mapping and storing in list
         'color':productSnapshot[i]['color'],

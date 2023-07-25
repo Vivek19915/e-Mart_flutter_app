@@ -83,7 +83,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                         autoPlayCurve: Curves.fastOutSlowIn,
                         itemCount: widget.data['p_imgs'].length,
                         itemBuilder: (context,index){
-                          return Image.network(widget.data['p_imgs'][index],width: double.infinity,fit: BoxFit.cover).box.padding(EdgeInsets.symmetric(horizontal: 10)).make();
+                          return Image.network(widget.data['p_imgs'][index],width: double.infinity,fit: BoxFit.cover).box.margin(EdgeInsets.symmetric(horizontal: 10)).rounded.clip(Clip.antiAlias).make();
                         }
                     ),
 

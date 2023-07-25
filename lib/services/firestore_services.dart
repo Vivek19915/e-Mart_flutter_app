@@ -82,4 +82,11 @@ class FirestoreServices {
   static getAllProducts(){
     return firestore.collection(productsCollection).snapshots();
   }
+
+
+
+  //get featured products -->
+  static getFeaturedProduct(){
+    return firestore.collection(productsCollection).where('p_featured',isEqualTo: true).snapshots();
+  }
 }
