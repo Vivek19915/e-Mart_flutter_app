@@ -36,7 +36,7 @@ class MessagingScreen extends StatelessWidget {
                 children: [
                   Expanded(
                       child: ListView.builder(
-                        itemCount: data.length,
+                          itemCount: data.length,
                           itemBuilder: (BuildContext context , int index){
                           return Card(
                             child: ListTile(
@@ -44,12 +44,12 @@ class MessagingScreen extends StatelessWidget {
                                 Get.to(()=>ChatScreen(),arguments: [data[index]['sender_name'],data[index]['toId']]);
                               },
                               leading: CircleAvatar(
-                                child: Icon(Icons.person,color: whiteColor,),
-                                backgroundColor: redColor,
+                                child: Icon(Icons.person,color: redColor,),
+                                backgroundColor: Colors.white,
                               ),
-                              title: data[index]['seller_name'].toString().text.fontFamily(semibold).color(darkFontGrey).make(),
-                              subtitle: data[index]['last_msg'].toString().text.color(darkFontGrey).make()
-                            ),
+                              title: data[index]['seller_name'].toString().text.fontFamily(semibold).color(Colors.white).make(),
+                              subtitle: data[index]['last_msg'].toString().text.color(Colors.white).make()
+                            ).box.color(redColor).roundedSM.make(),
                           );
                           }
                       ))

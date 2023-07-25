@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../consts/consts.dart';
+import '../../controller/product_controller.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -17,6 +18,7 @@ class Home extends StatelessWidget {
 
     //init home controller
     var controller = Get.put(HomeController());
+    var productController = Get.put(ProductController());
 
     //creating list of item for bottom navabr
     var navbarItem  = [

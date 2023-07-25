@@ -6,7 +6,7 @@ var secondSliderList =[imgSs1,imgSs2,imgSs3,imgSs4];
 var featuredImages1 = [imgS1,imgS2,imgS3];
 var featuredImages2 = [imgS4,imgS5,imgS6];
 
-var featuredTitles1 = [womenDress,girlsDress,girlsWatches];
+var featuredTitles1 = [womenClothing,girlsDress,girlsWatches];
 var featuredTitles2 = [boysGlasses,mobilePhones,tShirts];
 
 var featuredProductImages = [imgP1,imgP2,imgP3,imgP4,imgP5,imgP6,imgP7];

@@ -49,7 +49,7 @@ class CategoryDetails extends StatelessWidget {
                     ).scrollHorizontal(physics: BouncingScrollPhysics()),
                     20.heightBox,
 
-                    //item containor
+                    //item containor------>
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.all(12),
@@ -64,7 +64,7 @@ class CategoryDetails extends StatelessWidget {
                                 children: [
                                   //fecting all things from databse and showing here
 
-                                  Image.network(data[index]['p_imgs'][0],height: 140,fit: BoxFit.fill,).box.roundedSM.clip(Clip.antiAlias).make(),
+                                  Image.network(data[index]['p_imgs'][0],height: 140,width:140,fit: BoxFit.cover,).box.roundedSM.clip(Clip.antiAlias).make(),
                                   20.heightBox,
                                   data[index]['p_name'].toString().text.color(fontGrey).make(),
                                   10.heightBox,

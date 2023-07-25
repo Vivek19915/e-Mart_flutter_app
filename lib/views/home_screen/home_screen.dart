@@ -5,15 +5,19 @@ import 'package:e_mart/consts/list.dart';
 import 'package:e_mart/services/firestore_services.dart';
 import 'package:e_mart/views/home_screen/components/featured_button.dart';
 import 'package:e_mart/views/home_screen/components/featured_product_button.dart';
+import 'package:e_mart/views/home_screen/search_screen.dart';
 import 'package:e_mart/widgets_common/home_buttons.dart';
 import 'package:e_mart/widgets_common/loading_indicator.dart';
 import 'package:get/get.dart';
+
+import '../../controller/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var homeController = Get.find<HomeController>();
     return Container(
       color: lightGrey,
       padding: EdgeInsets.all(12),
@@ -26,9 +30,14 @@ class HomeScreen extends StatelessWidget {
               height: 60,
               alignment: Alignment.center,
               child: TextFormField(
+                controller: homeController.searchController,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  suffixIcon: Icon(Icons.search),
+                  suffixIcon: Icon(Icons.search).onTap(() {
+                    if(homeController.searchController.text.isNotEmptyAndNotNull){
+                      Get.to(()=>SearchScreen(title: homeController.searchController.text,));
+                    }
+                  }),
                   filled: true,
                   fillColor: Colors.white,
                   hintText: "Search Anything....",
